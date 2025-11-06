@@ -1,3 +1,6 @@
+
+
+
 import csv, os
 
 __location__ = os.path.realpath(
@@ -29,35 +32,51 @@ print()
 
 # Print all cities in Germany
 
-'''
-Your code here
-
-'''
+print("All cities in Germany:")
+all_city = []
+for city in cities:
+    if city["country"] == "Germany":
+        all_city.append(city["city"])
+print(all_city)
+print()
 
 # Print all cities in Spain with a temperature above 12°C
 
-'''
-Your code here
-
-'''
+print("All cities in Spain with a temperature above 12°C")
+all_city = []
+for city in cities:
+    if city["country"] == "Spain" and float(city["temperature"]) > 12:
+        all_city.append(city["city"])
+print(all_city)
+print()
 
 # Count the number of unique countries
 
-'''
-Your code here
-
-'''
+print("Number of unique countries:")
+all_city = []
+for city in cities:
+    if city["country"] not in all_city:
+        all_city.append(city["country"])
+print(len(all_city))
+print()
 
 # Print the average temperature for all the cities in Germany
 
-'''
-Your code here
-
-'''
+print("The average temperature of all the cities in Germany:")
+all_city = []
+for city in cities:
+    if city["country"] == "Germany":
+        all_city.append(float(city["temperature"]))
+print(sum(all_city) / len(all_city))
+print()
 
 # Print the max temperature for all the cities in Italy
 
-'''
-Your code here
+print("The max temperature for all the cities in Italy:")
+all_city = []
+for city in cities:
+    if city["country"] == "Italy":
+        all_city.append(float(city["temperature"]))
+print(max(all_city))
+print()
 
-'''
