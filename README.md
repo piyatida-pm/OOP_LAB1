@@ -1,90 +1,150 @@
-# OOP Lab 1: CSV Data Processing
+# OOP Lab: Data Processing with Custom Database, Table, and CSV Loader
 
-## Lab Overview  
-This lab demonstrates how to use **Object-Oriented Programming (OOP)** in Python to handle and analyze data stored in CSV files.  
+## Lab Overview
+This lab focuses on building a lightweight data-processing framework in Python using Object-Oriented Programming principles.  
+Students implement 3 core components:
 
-In this project, we create two main classes:  
-- `DataLoader` — responsible for loading CSV files.  
-- `Table` — allows filtering and aggregating data with custom conditions and functions.  
+1. **DataLoader** — Reads CSV files into Python dictionaries  
+2. **Table** — Represents a dataset with filtering, aggregation, and joining capabilities  
+3. **DB (Database)** — Stores and retrieves table objects  
 
-You will learn how to:  
-- Read CSV data into Python.  
-- Use OOP principles to make code modular and reusable.  
-- Apply lambda functions for filtering and aggregation.  
+The goal is to simulate how databases work internally while practicing class design, method creation, and data manipulation.
 
-**Example of `Cities.csv`:**
-```csv
-city,country,temperature
-Berlin,Germany,13.5
-Madrid,Spain,15.2
-Rome,Italy,18.4
-Munich,Germany,11.9
-Barcelona,Spain,14.8
- 
-```
-
----
 
 ## Project Structure
 
+OOP_LAB3
 
-This is the structure of this project
+├── data_processing.py # Main implementation (DataLoader, DB, Table, tests).
 
-- **`oop_lab_1/`**: Contains every file for this program
-    - **`README.md`**: # This file
-    - **`Cities.csv`**: # The dataset
-    - **`data_processing.py`**: # The analysis code
+├── Cities.csv # Input dataset 1
+
+├── Countries.csv # Input dataset 2
+
+└── README.md # Project documentation
 
 
-# Design Overview
-## Class: DataLoader
-
-This class is responsible for reading CSV data from the specified directory.
-
-### Attributes:
-
-base_path: The base folder path where data files are located.
-
-### Methods:
-
-__init__(base_path=None): Initializes the loader. If no path is given, it uses the current file’s directory.
-
-load_csv(filename): Loads the specified CSV file and returns a list of dictionaries (each representing a row).
-
-## Class: Table
-
-### **Overview**
-The `Table` class represents a dataset (table) and provides methods for **filtering** and **aggregating** data.  
-It stores the table’s data as a list of dictionaries, making it easy to apply conditions and summary functions dynamically.
+- `Cities.csv` — Contains city name, country, and temperature  
+- `Countries.csv` — Contains country name, EU membership, coastline info  
 
 ---
 
-### **Attributes**
-| Attribute | Type | Description |
-|------------|------|-------------|
-| `name` | `str` | Name of the table (e.g., `"cities"`) |
-| `table` | `list[dict]` | List of dictionaries where each item represents a row of the dataset |
+## Design Overview
+
+### 1. **DataLoader**
+Handles reading CSV files from the project directory.
+
+**Attributes**
+```
+base_path : directory where CSV files are located
+```
+
+**Key Methods**
+```
+- load_csv(filename)
+  - Opens a CSV file  
+  - Converts each row into a dictionary  
+  - Returns a list of dictionaries (table data)
+  ```
 
 ---
 
-### **Methods**
+### 2. **DB (Database)**
+A simple database storing multiple `Table` objects.
 
-####  `__init__(self, cities, city_table)`
-**Purpose:**  
-Initializes a new instance of the `Table` class.
+**Attributes**
+```
+- `tables` : dictionary mapping table_name → Table object
+```
+**Key Methods**
+```
+- `insert(table_obj)`  
+  Stores a Table inside the DB.
 
-**Parameters:**  
-- `cities` *(str)* – Name of the table.  
-- `city_table` *(list)* – Data loaded from CSV (list of dictionaries).
+- `search(table_name)`  
+  Returns a table by name (or `None` if not found)
+```
+---
 
-**Example:**
-```python
-my_table = Table("cities", cities_data)
+### 3. **Table**
+Represents a dataset (list of dicts) and provides data manipulation functions.
 
+**Attributes**
+```
+- `table_name` : name of the dataset  
+- `table` : actual list of dictionaries  
+```
+**Key Methods**
+```
+- get_data()
+Returns raw data for use in joins or external processing.
+```
+```
+filter(condition)
+- Accepts a lambda expression  
+- Returns a new Table containing rows that satisfy the condition  
+- Example:  
+  filtered = cities.filter(lambda x: x['country'] == 'Italy')
+  filtered = cities.filter(lambda x: x['country'] == 'Italy')
+```
+```
+aggregate(func, attribute)
 
-##  How to Use
+- Performs an aggregation on a specific attribute
+- Converts values to float when possible
+- Works with: min, max, sum, len, averages, etc.
+- Example:
+  avg_temp = filtered.aggregate(lambda x: sum(x)/len(x),'temperature')
+```
+```
+join(other_table, common_key)
 
-To run the demonstration script, execute `data_processing.py` from your terminal:
+Performs an inner join between two tables on a shared attribute
+Combines dictionaries using {**row1, **row2}
+Returns a new Table with merged data
+```
+### 4. **How to Test and Run the Code**
 
-```bash
-python data_processing.py
+1.Make sure Cities.csv and Countries.csv are in the same folder as data_processing.py.
+
+2.Run the script in your terminal:
+
+```
+python3 data_processing.py
+```
+3.The program will execute the following tests automatically:
+
+- List all cities in Italy
+- Calculate average temperature in Italy
+- List all non-EU countries
+- Count countries with coastlines
+- Perform a join between cities and countries
+- Filter cities by temperature and EU status
+- Find min/max temperature of cities in non-coastline EU countries
+
+### **example:**
+```
+List all cities in Italy:
+- cities_filtered:[...]
+Average temperature for all cities in Italy:
+- 12.7
+List all non-EU countries:
+- countries_filtered:[...]
+Number of countries that have coastline:
+- 8
+First 5 entries of the joined table:
+- {...}
+Cities whose temperatures are below 5.0 in non-EU countries:
+- [...]
+
+Min temp: ...
+Max temp: ...
+```
+---
+### 5.**Final Notes**
+
+After completing the lab, commit all changes with a clear message, e.g.:
+
+- git add .
+- git commit -m "Completed OOP Lab 3 with DataLoader, Table, DB classes and README"
+- git push
